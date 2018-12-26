@@ -26,6 +26,8 @@ Future work in better training strategy and exploring other models such as Xcept
 
 * Ensemble model of the fully fine-tuned Inception V3 and DenseNet 201 (best result): Ensemble_Models.ipynb 
 
+**Technical Issue**: I'm using Keras 2.2.4 and Tensorflow 1.11. Batch-Norm layer in this version of Keras is implemented "weirdly", and consequently, if use Keras's example codes for fine-tuning Inception V3 or any network with batch norm layer, the results will be very bad. Please refer to issue [#9965](https://github.com/keras-team/keras/pull/9965) and [#9214](https://github.com/keras-team/keras/issues/9214). 
+
 ## Results
 
 | Models        | Validation           | Test            |  Depth          | # Params          |
