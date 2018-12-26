@@ -1,4 +1,4 @@
-# Skin_Lesions_Classification_DCNN
+# Skin Lesions Classification with Deep Convolutional Neural Network
 
 This is a 40-hour project for CIS 5526 Machine Learning. For full description and analysis please refer to Project_Report.pdf
 
