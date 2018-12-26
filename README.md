@@ -26,7 +26,17 @@ Future work in better training strategy and exploring other models such as Xcept
 
 * Ensemble model of the fully fine-tuned Inception V3 and DenseNet 201 (best result): Ensemble_Models.ipynb 
 
-**Technical Issue**: I'm using Keras 2.2.4 and Tensorflow 1.11. Batch-Norm layer in this version of Keras is implemented "weirdly", and consequently, if use Keras's example codes for fine-tuning Inception V3 or any network with batch norm layer, the results will be very bad. Please refer to issue [#9965](https://github.com/keras-team/keras/pull/9965) and [#9214](https://github.com/keras-team/keras/issues/9214). 
+**Technical Issue**: I'm using Keras 2.2.4 and Tensorflow 1.11. Batch-Norm layer in this version of Keras is implemented in a way that: if we freeze all layers of Inception V3 and unfreeze only the last 2 inception blocks for fine-tuning, then during inference, the batch-norm layers in the previous inception blocks will use statistics of the original dataset, the ImageNet, and this statistics may be completely different from the statistics of our dataset. Consequently, if use Keras's example codes for fine-tuning Inception V3 or any network with batch norm layer, the results will be very bad. Please refer to issue [#9965](https://github.com/keras-team/keras/pull/9965) and [#9214](https://github.com/keras-team/keras/issues/9214). One temporary solution is: 
+
+```python
+for layer in pre_trained_model.layers:
+    if hasattr(layer, 'moving_mean') and hasattr(layer, 'moving_variance'):
+        layer.trainable = True
+        K.eval(K.update(layer.moving_mean, K.zeros_like(layer.moving_mean)))
+        K.eval(K.update(layer.moving_variance, K.zeros_like(layer.moving_variance)))
+    else:
+        layer.trainable = False
+```
 
 ## Results
 
